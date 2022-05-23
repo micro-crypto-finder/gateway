@@ -2,6 +2,9 @@ plugins {
 	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jvm-test-suite' // https://docs.gradle.org/current/userguide/jvm_test_suite_plugin.html
+	id 'com.gorylenko.gradle-git-properties' version '2.4.1' // https://github.com/n0mer/gradle-git-properties
+	id 'com.google.cloud.tools.jib' version '3.2.1'
 }
 
 group = 'com.jjbeto.microservice'
@@ -10,14 +13,79 @@ sourceCompatibility = '17'
 
 repositories {
 	mavenCentral()
+	maven { url 'https://repo.spring.io/snapshot' }
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+ext {
+	set('springCloudVersion', "2021.0.3-SNAPSHOT")
+}
+
+springBoot {
+	buildInfo()
+}
+gitProperties {
+	keys = ['git.commit.id', 'git.branch']
+}
+
+testing {
+	suites {
+		integrationTest(JvmTestSuite) {
+			dependencies {
+				implementation project
+				implementation 'org.springframework.boot:spring-boot-starter-test'
+			}
+		}
+	}
+}
+
+tasks.named('check') {
+	dependsOn testing.suites.integrationTest
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'javax.cache:cache-api' // jcache
+	implementation 'org.ehcache:ehcache'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jib {
+	from {
+		image = 'openjdk:17-alpine'
+	}
+	to {
+		image = 'jjbeto/micro-crypto-finder-gateway'
+		tags = project.provider { [version, 'latest'] }
+		auth {
+			username = "$System.env.REGISTRY_LOGIN"
+			password = "$System.env.REGISTRY_PASSWORD"
+		}
+	}
+	container {
+		jvmFlags = ['-Xms512m']
+		mainClass = 'com.jjbeto.microservice.gateway.GatewayApplication'
+		ports = ['8080']
+		environment = [
+				SPRING_OUTPUT_ANSI_ENABLED: 'ALWAYS'
+		]
+		creationTime = "USE_CURRENT_TIMESTAMP"
+		user = 1000
+		format = 'OCI'
+	}
 }
