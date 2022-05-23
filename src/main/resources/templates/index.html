@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}"/>
+    <title>Crypto Price Locator</title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-static-top navbar-dark bg-dark justify-content-center">
+    <a class="navbar-brand" href="https://jjbeto.com/">by jjbeto.com</a>
+</nav>
+
+<main class="container">
+
+    <div class="row justify-content-center m-2">
+        <h3 th:utext="${price}"></h3>
+    </div>
+
+    <form th:action="@{/}" class="justify-content-center">
+        <div class="row form-group">
+            <label for="ip">IP (Optional)</label>
+            <input type="text" class="form-control"
+                   id="ip" aria-describedby="ipHelp"
+                   placeholder="Enter a reference IP" th:name="ip" th:value="${filledIp}">
+            <small id="ipHelp" class="form-text text-muted">
+                If no <code>IP</code> is informed, your <code>browser's IP</code> will be user instead.
+            </small>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+
+</main>
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
+</body>
+</html>
