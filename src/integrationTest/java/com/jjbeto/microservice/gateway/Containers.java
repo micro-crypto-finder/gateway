@@ -17,4 +17,9 @@ public final class Containers {
             .waitingFor(forLogMessage(".*Started IpLocatorApplication.*", 1))
             .withLogConsumer(new Slf4jLogConsumer(LOGGER));
 
+    public static final GenericContainer<?> CRYPTO_LOCATOR = new GenericContainer<>(parse("jjbeto/micro-crypto-finder-cryptolocator:latest"))
+            .withExposedPorts(8080)
+            .waitingFor(forLogMessage(".*Started CryptolocatorApplication.*", 1))
+            .withLogConsumer(new Slf4jLogConsumer(LOGGER));
+
 }
