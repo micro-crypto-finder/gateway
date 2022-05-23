@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.is;
@@ -29,6 +30,7 @@ public class IndexControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @WithMockUser(value = "mocked_user")
     @Test
     public void returnedPriceWhenNoIpIsGivenOrItsInitialPage() throws Exception {
         when(ipLocatorService.getCurrencyByIp("127.0.0.1")).thenReturn("EUR");
@@ -42,6 +44,7 @@ public class IndexControllerTest {
                 .andExpect(model().attribute("price", is("Current unit price is<br>EUR 1.99")));
     }
 
+    @WithMockUser(value = "mocked_user")
     @Test
     public void returnedPriceWhenAnIpIsGiven() throws Exception {
         when(ipLocatorService.getCurrencyByIp("10.10.10.10")).thenReturn("JPY");

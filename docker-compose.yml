@@ -10,9 +10,9 @@ services:
       - FEIGN_CLIENT_IP_API_FIELDS=status,message,countryCode,currency
       - FEIGN_CLIENT_IP_API_FALLBACK_CURRENCY=EUR
       - LOG_GENERAL_LEVEL=info
-  #### only used for localhost testing
-  #    ports:
-  #      - '8081:8080'
+    #### only used for localhost testing
+    ports:
+      - '8081:8080'
   micro-crypto-finder-cryptolocator:
     image: jjbeto/micro-crypto-finder-cryptolocator
     environment:
@@ -22,9 +22,9 @@ services:
       - CACHE_CONFIG_POOL_TTL_IN_SEC=30
       - FEIGN_CLIENT_IP_API_FALLBACK_CURRENCY=EUR
       - LOG_GENERAL_LEVEL=info
-  #### only used for localhost testing
-  #    ports:
-  #      - '8082:8080'
+    #### only used for localhost testing
+    ports:
+      - '8082:8080'
   micro-crypto-finder-gateway:
     image: jjbeto/micro-crypto-finder-gateway
     environment:
@@ -36,8 +36,10 @@ services:
       - IP_LOCATOR_URL=http://micro-crypto-finder-iplocator:8080/api/ip-locator
       - CRYPTO_LOCATOR_URL=http://micro-crypto-finder-cryptolocator:8080/api/crypto-locator
       - LOG_GENERAL_LEVEL=info
+      - APP_USER=user
+      - APP_PASSWORD=password
     ports:
-      - '8080:8080'
+      - '8083:8080'
     depends_on:
       - micro-crypto-finder-iplocator
       - micro-crypto-finder-cryptolocator

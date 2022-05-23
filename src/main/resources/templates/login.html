@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}"/>
+    <title>Crypto Price Locator</title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-static-top navbar-dark bg-dark justify-content-center">
+    <a class="navbar-brand" href="https://jjbeto.com/">by jjbeto.com</a>
+</nav>
+
+<div class="container">
+
+    <div class="row justify-content-center m-2">
+        <h3 class="form-heading">Log in</h3>
+    </div>
+
+    <form th:action="@{/login}" method="POST" class="justify-content-center">
+        <div class="row form-group">
+            <span th:text="${message}"></span>
+
+            <label for="username">User</label>
+            <input id="username" name="username" type="text" class="form-control" placeholder="enter your username" autofocus="true"/>
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" class="form-control" placeholder="enter your password"/>
+
+            <span class="has-error" th:text="${error}"></span>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn btn-primary">Log In</button>
+        </div>
+    </form>
+
+</div>
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
+</body>
+</html>
