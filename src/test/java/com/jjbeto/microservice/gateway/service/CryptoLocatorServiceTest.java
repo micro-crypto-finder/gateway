@@ -28,8 +28,8 @@ class CryptoLocatorServiceTest {
 
     @Test
     void getInformedThatPriceIsNotAvailable() {
-        when(cryptoLocatorClient.getCryptoPrice("EUR")).thenReturn(new PriceDataDto());
-        var price = cryptoLocatorService.getCryptoPrice("EUR");
+        when(cryptoLocatorClient.getCryptoPrice("USD")).thenReturn(new PriceDataDto());
+        var price = cryptoLocatorService.getCryptoPrice("USD");
         assertEquals("No price available", price);
     }
 
